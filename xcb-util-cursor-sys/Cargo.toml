@@ -13,7 +13,7 @@ links = "xcb-cursor"
 
 [lib]
 name = "xcb_util_cursor_sys"
-path = "lib.rs"
+path = "src/lib.rs"
 
 [build-dependencies]
 bindgen = "0.61.0"

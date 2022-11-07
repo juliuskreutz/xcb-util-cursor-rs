@@ -1,0 +1,19 @@
+[package]
+name = "xcb_util_cursor_sys"
+version = "0.1.0"
+authors = ["Julius Kreutz <julius@kreutz.dev>"]
+edition = "2021"
+description = "Bindings to libxcb-cursor."
+documentation = "https://docs.rs/xcb-util-cursor-sys"
+homepage = "https://github.com/JuliusKreutz/xcb-util-cursor-rs"
+repository = "https://github.com/JuliusKreutz/xcb-util-cursor-rs"
+license = "MIT/Apache-2.0"
+categories = ["external-ffi-bindings"]
+links = "xcb-cursor"
+
+[lib]
+name = "xcb_util_cursor_sys"
+path = "lib.rs"
+
+[build-dependencies]
+bindgen = "0.61.0"

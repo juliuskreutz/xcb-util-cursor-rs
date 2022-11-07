@@ -1,5 +1,5 @@
 [package]
-name = "xcb_util_cursor_sys"
+name = "xcb-util-cursor-sys"
 version = "0.1.0"
 authors = ["Julius Kreutz <julius@kreutz.dev>"]
 edition = "2021"

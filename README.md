@@ -7,7 +7,7 @@ xcb-util-cursor is a safe rust interface for [libxcb-cursor](https://gitlab.free
 ```toml
 # Cargo.toml
 [dependencies]
-xcb-util-cursor = "0.1.0"
+xcb-util-cursor = "0.1.1"
 ```
 
 ```rust

@@ -1,13 +1,20 @@
 [package]
 name = "xcb-util-cursor"
 version = "0.1.0"
+authors = ["Julius Kreutz <julius@kreutz.dev>"]
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "Bindings to libxcb-cursor."
+documentation = "https://docs.rs/xcb-util-cursor"
+readme = "README.md"
+homepage = "https://github.com/JuliusKreutz/xcb-util-cursor-rs"
+repository = "https://github.com/JuliusKreutz/xcb-util-cursor-rs"
+license = "MIT/Apache-2.0"
+keywords = ["xcb"]
+categories = ["api-bindings"]
 
 [lib]
 name = "xcb_util_cursor"
-path = "lib.rs"
+path = "src/lib.rs"
 
 [dependencies]
 xcb = "1.2.0"
@@ -16,3 +23,7 @@ anyhow = "1.0.66"
 [dependencies.xcb-util-cursor-sys]
 version = "0.1.0"
 path = "xcb-util-cursor-sys"
+
+[dependencies.strum]
+version = "0.24.1"
+features = ["derive"]

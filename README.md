@@ -8,7 +8,7 @@ xcb-util-cursor is a safe rust interface for [libxcb-cursor](https://gitlab.free
 # Cargo.toml
 [dependencies]
 xcb = "1.2.0"
-xcb-util-cursor = "0.1.2"
+xcb-util-cursor = "0.2.0"
 ```
 
 ```rust
@@ -20,5 +20,5 @@ let screen = setup.roots().next().unwrap();
 
 let cursor_context = CursorContext::new(&connection, screen).unwrap();
 
-let left_ptr = cursor_context.load_cursor(Cursor::LeftPtr).unwrap();
+let left_ptr = cursor_context.load_cursor(Cursor::LeftPtr);
 ```

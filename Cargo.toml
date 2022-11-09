@@ -18,12 +18,7 @@ path = "src/lib.rs"
 
 [dependencies]
 xcb = "1.2.0"
-anyhow = "1.0.66"
 
 [dependencies.xcb-util-cursor-sys]
-version = "0.1.0"
+version = "0.1.1"
 path = "xcb-util-cursor-sys"
-
-[dependencies.strum]
-version = "0.24.1"
-features = ["derive"]

@@ -12,253 +12,259 @@
 //!
 //! let cursor_context = CursorContext::new(&connection, screen).unwrap();
 //!
-//! let left_ptr = cursor_context.load_cursor(Cursor::LeftPtr).unwrap();
+//! let left_ptr = cursor_context.load_cursor(Cursor::LeftPtr);
 //! ```
 
 #![deny(missing_docs)]
 #![doc(html_root_url = "https://docs.rs/xcb-util-cursor/")]
 
-use std::{ffi, ptr};
+use std::{ffi, fmt, ptr};
 
-use anyhow::Result;
-use strum::Display;
 use xcb::{x, Xid, XidNew};
 use xcb_util_cursor_sys as sys;
 
 /// This enum provides all possible cursors. [reference](https://www.oreilly.com/library/view/x-window-system/9780937175149/ChapterD.html)
-#[derive(Display)]
 pub enum Cursor {
     /// X_cursor
-    #[strum(serialize = "X_cursor")]
     XCursor,
     /// arrow
-    #[strum(serialize = "arrow")]
     Arrow,
     /// based_arrow_down
-    #[strum(serialize = "based_arrow_down")]
     BaseArrowDown,
     /// based_arrow_up
-    #[strum(serialize = "based_arrow_up")]
     BasedArrowUp,
     /// boat
-    #[strum(serialize = "boat")]
     Boat,
     /// bogosity
-    #[strum(serialize = "bogosity")]
     Bogosity,
     /// bottom_left_corner
-    #[strum(serialize = "bottom_left_corner")]
     BottomLeftCorner,
     /// bottom_right_corner
-    #[strum(serialize = "bottom_right_corner")]
     BottomRightCorner,
     /// bottom_side
-    #[strum(serialize = "bottom_side")]
     BottomSide,
     /// bottom_tee
-    #[strum(serialize = "bottom_tee")]
     BottomTee,
     /// box_spiral
-    #[strum(serialize = "box_spiral")]
     BoxSpiral,
     /// center_ptr
-    #[strum(serialize = "center_ptr")]
     CenterPtr,
     /// circle
-    #[strum(serialize = "circle")]
     Circle,
     /// clock
-    #[strum(serialize = "clock")]
     Clock,
     /// coffee_mug
-    #[strum(serialize = "coffee_mug")]
     CoffeeMug,
     /// cross
-    #[strum(serialize = "cross")]
     Cross,
     /// cross_reverse
-    #[strum(serialize = "cross_reverse")]
     CrossReverse,
     /// crosshair
-    #[strum(serialize = "crosshair")]
     Crosshair,
     /// diamond_cross
-    #[strum(serialize = "diamond_cross")]
     DiamongCross,
     /// dot
-    #[strum(serialize = "dot")]
     Dot,
     /// dotbox
-    #[strum(serialize = "dotbox")]
     Dotbox,
     /// double_arrow
-    #[strum(serialize = "double_arrow")]
     DoubleArrow,
     /// draft_large
-    #[strum(serialize = "draft_large")]
     DraftLarge,
     /// draft_small
-    #[strum(serialize = "draft_small")]
     DrawftSmall,
     /// draped_box
-    #[strum(serialize = "draped_box")]
     DrapedBox,
     /// exchange
-    #[strum(serialize = "exchange")]
     Exchange,
     /// fleur
-    #[strum(serialize = "fleur")]
     Fleur,
     /// gobbler
-    #[strum(serialize = "gobbler")]
     Gobbler,
     /// gumby
-    #[strum(serialize = "gumby")]
     Gumby,
     /// hand1
-    #[strum(serialize = "hand1")]
     Hand1,
     /// hand2
-    #[strum(serialize = "hand2")]
     Hand2,
     /// heart
-    #[strum(serialize = "heart")]
     Heart,
     /// icon
-    #[strum(serialize = "icon")]
     Icon,
     /// iron_cross
-    #[strum(serialize = "iron_cross")]
     IronCross,
     /// left_ptr
-    #[strum(serialize = "left_ptr")]
     LeftPtr,
     /// left_side
-    #[strum(serialize = "left_side")]
     LeftSide,
     /// left_tee
-    #[strum(serialize = "left_tee")]
     LeftTee,
     /// leftbutton
-    #[strum(serialize = "leftbutton")]
     Leftbutton,
     /// ll_angle
-    #[strum(serialize = "ll_angle")]
     LlAngle,
     /// lr_angle
-    #[strum(serialize = "lr_angle")]
     LrAngle,
     /// man
-    #[strum(serialize = "man")]
     Man,
     /// middlebutton
-    #[strum(serialize = "middlebutton")]
     Middlebutton,
     /// mouse
-    #[strum(serialize = "mouse")]
     Mouse,
     /// pencil
-    #[strum(serialize = "pencil")]
     Pencil,
     /// pirate
-    #[strum(serialize = "pirate")]
     Pirate,
     /// plus
-    #[strum(serialize = "plus")]
     Plus,
     /// question_arrow
-    #[strum(serialize = "question_arrow")]
     QuestionArrow,
     /// right_ptr
-    #[strum(serialize = "right_ptr")]
     RightPtr,
     /// right_side
-    #[strum(serialize = "right_side")]
     RightSide,
     /// right_tee
-    #[strum(serialize = "right_tee")]
     RightTee,
     /// rightbutton
-    #[strum(serialize = "rightbutton")]
     Rightbutton,
     /// rtl_logo
-    #[strum(serialize = "rtl_logo")]
     RtlLogo,
     /// sailboat
-    #[strum(serialize = "sailboat")]
     Sailboat,
     /// sb_down_arrow
-    #[strum(serialize = "sb_down_arrow")]
     SbDownArrow,
     /// sb_h_double_arrow
-    #[strum(serialize = "sb_h_double_arrow")]
     SbHDoubleArrow,
     /// sb_left_arrow
-    #[strum(serialize = "sb_left_arrow")]
     SbLeftArrow,
     /// sb_right_arrow
-    #[strum(serialize = "sb_right_arrow")]
     SbRightArrow,
     /// sb_up_arrow
-    #[strum(serialize = "sb_up_arrow")]
     SbUpArrow,
     /// sb_v_double_arrow
-    #[strum(serialize = "sb_v_double_arrow")]
     SbVDoubleArrow,
     /// shuttle
-    #[strum(serialize = "shuttle")]
     Shuttle,
     /// sizing
-    #[strum(serialize = "sizing")]
     Sizing,
     /// spider
-    #[strum(serialize = "spider")]
     Spider,
     /// spraycan
-    #[strum(serialize = "spraycan")]
     Spraycan,
     /// star
-    #[strum(serialize = "star")]
     Star,
     /// target
-    #[strum(serialize = "target")]
     Target,
     /// tcross
-    #[strum(serialize = "tcross")]
     Tcross,
     /// top_left_arrow
-    #[strum(serialize = "top_left_arrow")]
     TopLeftArrow,
     /// top_left_corner
-    #[strum(serialize = "top_left_corner")]
     TopLeftCorner,
     /// top_right_corner
-    #[strum(serialize = "top_right_corner")]
     TopRightCorner,
     /// top_side
-    #[strum(serialize = "top_side")]
     TopSide,
     /// top_tee
-    #[strum(serialize = "top_tee")]
     TopTee,
     /// trek
-    #[strum(serialize = "trek")]
     Trek,
     /// ul_angle
-    #[strum(serialize = "ul_angle")]
     UlAngle,
     /// umbrella
-    #[strum(serialize = "umbrella")]
     Umbrella,
     /// ur_angle
-    #[strum(serialize = "ur_angle")]
     UrAngle,
     /// watch
-    #[strum(serialize = "watch")]
     Watch,
     /// xterm
-    #[strum(serialize = "xterm")]
     Xterm,
+}
+
+impl fmt::Display for Cursor {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            Cursor::XCursor => "X_cursor",
+            Cursor::Arrow => "arrow",
+            Cursor::BaseArrowDown => "based_arrow_down",
+            Cursor::BasedArrowUp => "based_arrow_up",
+            Cursor::Boat => "boat",
+            Cursor::Bogosity => "bogosity",
+            Cursor::BottomLeftCorner => "bottom_left_corner",
+            Cursor::BottomRightCorner => "bottom_right_corner",
+            Cursor::BottomSide => "bottom_side",
+            Cursor::BottomTee => "bottom_tee",
+            Cursor::BoxSpiral => "box_spiral",
+            Cursor::CenterPtr => "center_ptr",
+            Cursor::Circle => "circle",
+            Cursor::Clock => "clock",
+            Cursor::CoffeeMug => "coffee_mug",
+            Cursor::Cross => "cross",
+            Cursor::CrossReverse => "cross_reverse",
+            Cursor::Crosshair => "crosshair",
+            Cursor::DiamongCross => "diamond_cross",
+            Cursor::Dot => "dot",
+            Cursor::Dotbox => "dotbox",
+            Cursor::DoubleArrow => "double_arrow",
+            Cursor::DraftLarge => "draft_large",
+            Cursor::DrawftSmall => "draft_small",
+            Cursor::DrapedBox => "draped_box",
+            Cursor::Exchange => "exchange",
+            Cursor::Fleur => "fleur",
+            Cursor::Gobbler => "gobbler",
+            Cursor::Gumby => "gumby",
+            Cursor::Hand1 => "hand1",
+            Cursor::Hand2 => "hand2",
+            Cursor::Heart => "heart",
+            Cursor::Icon => "icon",
+            Cursor::IronCross => "iron_cross",
+            Cursor::LeftPtr => "left_ptr",
+            Cursor::LeftSide => "left_side",
+            Cursor::LeftTee => "left_tee",
+            Cursor::Leftbutton => "leftbutton",
+            Cursor::LlAngle => "ll_angle",
+            Cursor::LrAngle => "lr_angle",
+            Cursor::Man => "man",
+            Cursor::Middlebutton => "middlebutton",
+            Cursor::Mouse => "mouse",
+            Cursor::Pencil => "pencil",
+            Cursor::Pirate => "pirate",
+            Cursor::Plus => "plus",
+            Cursor::QuestionArrow => "question_arrow",
+            Cursor::RightPtr => "right_ptr",
+            Cursor::RightSide => "right_side",
+            Cursor::RightTee => "right_tee",
+            Cursor::Rightbutton => "rightbutton",
+            Cursor::RtlLogo => "rtl_logo",
+            Cursor::Sailboat => "sailboat",
+            Cursor::SbDownArrow => "sb_down_arrow",
+            Cursor::SbHDoubleArrow => "sb_h_double_arrow",
+            Cursor::SbLeftArrow => "sb_left_arrow",
+            Cursor::SbRightArrow => "sb_right_arrow",
+            Cursor::SbUpArrow => "sb_up_arrow",
+            Cursor::SbVDoubleArrow => "sb_v_double_arrow",
+            Cursor::Shuttle => "shuttle",
+            Cursor::Sizing => "sizing",
+            Cursor::Spider => "spider",
+            Cursor::Spraycan => "spraycan",
+            Cursor::Star => "star",
+            Cursor::Target => "target",
+            Cursor::Tcross => "tcross",
+            Cursor::TopLeftArrow => "top_left_arrow",
+            Cursor::TopLeftCorner => "top_left_corner",
+            Cursor::TopRightCorner => "top_right_corner",
+            Cursor::TopSide => "top_side",
+            Cursor::TopTee => "top_tee",
+            Cursor::Trek => "trek",
+            Cursor::UlAngle => "ul_angle",
+            Cursor::Umbrella => "umbrella",
+            Cursor::UrAngle => "ur_angle",
+            Cursor::Watch => "watch",
+            Cursor::Xterm => "xterm",
+        };
+
+        write!(f, "{s}")
+    }
 }
 
 /// Wrapper sctruct for xcb_cursor_context_t that handles creation and freeing.
@@ -268,7 +274,7 @@ pub struct CursorContext {
 
 impl CursorContext {
     /// Create a new cursor context.
-    pub fn new(connection: &xcb::Connection, screen: &x::Screen) -> Result<Self> {
+    pub fn new(connection: &xcb::Connection, screen: &x::Screen) -> Result<Self, i32> {
         let mut screen = sys::xcb_screen_t {
             root: screen.root().resource_id(),
             default_colormap: screen.default_colormap().resource_id(),
@@ -298,24 +304,20 @@ impl CursorContext {
             )
         };
 
-        let Some(ctx) = ptr::NonNull::new(ctx) else {
-            anyhow::bail!(res);
-        };
-
-        Ok(Self { inner: ctx })
+        if let Some(ctx) = ptr::NonNull::new(ctx) {
+            Ok(Self { inner: ctx })
+        } else {
+            Err(res)
+        }
     }
 
-    /// Loads a cursor.
-    pub fn load_cursor(&self, cursor: Cursor) -> Result<x::Cursor> {
+    /// Loads a cursor. Returns CURSOR_NONE on error.
+    pub fn load_cursor(&self, cursor: Cursor) -> x::Cursor {
         unsafe {
-            let c_str = ffi::CString::new(cursor.to_string())?;
+            let c_str = ffi::CString::new(cursor.to_string()).unwrap();
             let cursor = sys::xcb_cursor_load_cursor(self.inner.as_ptr(), c_str.as_ptr());
 
-            if cursor == x::CURSOR_NONE.resource_id() {
-                anyhow::bail!("Could not load {}", cursor);
-            }
-
-            Ok(x::Cursor::new(cursor))
+            x::Cursor::new(cursor)
         }
     }
 }

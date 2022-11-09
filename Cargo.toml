@@ -1,6 +1,6 @@
 [package]
 name = "xcb-util-cursor"
-version = "0.1.2"
+version = "0.2.0"
 authors = ["Julius Kreutz <julius@kreutz.dev>"]
 edition = "2021"
 description = "Bindings to libxcb-cursor."

@@ -179,6 +179,8 @@ pub enum Cursor {
     Watch,
     /// xterm
     Xterm,
+    /// Custom cursor name
+    Custom(String),
 }
 
 impl fmt::Display for Cursor {
@@ -261,6 +263,7 @@ impl fmt::Display for Cursor {
             Cursor::UrAngle => "ur_angle",
             Cursor::Watch => "watch",
             Cursor::Xterm => "xterm",
+            Cursor::Custom(s) => s,
         };
 
         write!(f, "{s}")
@@ -274,7 +277,7 @@ pub struct CursorContext {
 
 impl CursorContext {
     /// Create a new cursor context.
-    pub fn new(connection: &xcb::Connection, screen: &x::Screen) -> Result<Self, i32> {
+    pub fn new(connection: &xcb::Connection, screen: &x::Screen) -> Option<Self> {
         let mut screen = sys::xcb_screen_t {
             root: screen.root().resource_id(),
             default_colormap: screen.default_colormap().resource_id(),
@@ -296,7 +299,7 @@ impl CursorContext {
 
         let mut ctx = ptr::null_mut();
 
-        let res = unsafe {
+        unsafe {
             sys::xcb_cursor_context_new(
                 connection.get_raw_conn() as *mut sys::xcb_connection_t,
                 &mut screen,
@@ -304,19 +307,15 @@ impl CursorContext {
             )
         };
 
-        if let Some(ctx) = ptr::NonNull::new(ctx) {
-            Ok(Self { inner: ctx })
-        } else {
-            Err(res)
-        }
+        ptr::NonNull::new(ctx).map(|ctx| Self { inner: ctx })
     }
 
     /// Loads a cursor. Returns CURSOR_NONE on error.
     pub fn load_cursor(&self, cursor: Cursor) -> x::Cursor {
-        unsafe {
-            let c_str = ffi::CString::new(cursor.to_string()).unwrap();
-            let cursor = sys::xcb_cursor_load_cursor(self.inner.as_ptr(), c_str.as_ptr());
+        let c_str = ffi::CString::new(cursor.to_string()).unwrap();
 
+        unsafe {
+            let cursor = sys::xcb_cursor_load_cursor(self.inner.as_ptr(), c_str.as_ptr());
             x::Cursor::new(cursor)
         }
     }

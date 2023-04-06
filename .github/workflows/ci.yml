@@ -6,6 +6,9 @@ on:
   workflow_dispatch:
   schedule: [cron: "0 0 * * *"]
 
+env:
+  RUSTFLAGS: -Dwarnings
+
 jobs:
   build:
     runs-on: ubuntu-latest

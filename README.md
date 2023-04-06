@@ -1,6 +1,8 @@
 # xcb-util-cursor
 
-**Documentation**: https://docs.rs/xcb-util-cursor
+[<img alt="github" src="https://img.shields.io/badge/github-juliuskreutz/xcb--util--cursor-8da0cb?style=for-the-badge&labelColor=555555&logo=github" height="20">](https://github.com/juliuskreutz/xcb-util-cursor)
+[<img alt="crates.io" src="https://img.shields.io/crates/v/xcb-util-cursor.svg?style=for-the-badge&color=fc8d62&logo=rust" height="20">](https://crates.io/crates/xcb-util-cursor)
+[<img alt="docs.rs" src="https://img.shields.io/badge/docs.rs-xcb--util--cursor-66c2a5?style=for-the-badge&labelColor=555555&logo=docs.rs" height="20">](https://docs.rs/xcb--util--cursor)
 
 xcb-util-cursor is a safe rust interface for [libxcb-cursor](https://gitlab.freedesktop.org/xorg/lib/libxcb-cursor). It depends on [rust-xcb](https://crates.io/crates/xcb) and uses their types.
 

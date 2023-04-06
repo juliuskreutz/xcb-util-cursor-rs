@@ -7,6 +7,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install libxcb-cursor-dev
+        run: sudo apt install -y libxcb-cursor-dev
+
       - name: Checkout Source Code
         uses: actions/checkout@v2
 

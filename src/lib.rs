@@ -18,10 +18,10 @@
 #![deny(missing_docs)]
 #![doc(html_root_url = "https://docs.rs/xcb-util-cursor/")]
 
-use std::{ffi, fmt, ptr};
+use std::{ffi::CString, fmt, marker, ptr};
 
 use xcb::{x, Xid, XidNew};
-use xcb_util_cursor_sys as sys;
+use xcb_util_cursor_sys as ffi;
 
 /// This enum provides all possible cursors. [reference](https://www.oreilly.com/library/view/x-window-system/9780937175149/ChapterD.html)
 pub enum Cursor {
@@ -271,14 +271,15 @@ impl fmt::Display for Cursor {
 }
 
 /// Wrapper sctruct for xcb_cursor_context_t that handles creation and freeing.
-pub struct CursorContext {
-    inner: ptr::NonNull<sys::xcb_cursor_context_t>,
+pub struct CursorContext<'a> {
+    ctx: *mut ffi::xcb_cursor_context_t,
+    phantom: marker::PhantomData<&'a xcb::Connection>,
 }
 
-impl CursorContext {
+impl<'a> CursorContext<'a> {
     /// Create a new cursor context.
-    pub fn new(connection: &xcb::Connection, screen: &x::Screen) -> Option<Self> {
-        let mut screen = sys::xcb_screen_t {
+    pub fn new(connection: &'a xcb::Connection, screen: &x::Screen) -> Option<Self> {
+        let mut screen = ffi::xcb_screen_t {
             root: screen.root().resource_id(),
             default_colormap: screen.default_colormap().resource_id(),
             white_pixel: screen.white_pixel(),
@@ -299,32 +300,35 @@ impl CursorContext {
 
         let mut ctx = ptr::null_mut();
 
-        unsafe {
-            sys::xcb_cursor_context_new(
-                connection.get_raw_conn() as *mut sys::xcb_connection_t,
-                &mut screen,
-                &mut ctx,
-            )
+        let res = unsafe {
+            ffi::xcb_cursor_context_new(connection.get_raw_conn(), &mut screen, &mut ctx)
         };
 
-        ptr::NonNull::new(ctx).map(|ctx| Self { inner: ctx })
+        if res != 0 {
+            None
+        } else {
+            Some(Self {
+                ctx,
+                phantom: marker::PhantomData,
+            })
+        }
     }
 
     /// Loads a cursor. Returns CURSOR_NONE on error.
     pub fn load_cursor(&self, cursor: Cursor) -> x::Cursor {
-        let c_str = ffi::CString::new(cursor.to_string()).unwrap();
+        let c_str = CString::new(cursor.to_string()).unwrap();
 
         unsafe {
-            let cursor = sys::xcb_cursor_load_cursor(self.inner.as_ptr(), c_str.as_ptr());
+            let cursor = ffi::xcb_cursor_load_cursor(self.ctx, c_str.as_ptr());
             x::Cursor::new(cursor)
         }
     }
 }
 
-impl Drop for CursorContext {
+impl<'a> Drop for CursorContext<'a> {
     fn drop(&mut self) {
         unsafe {
-            sys::xcb_cursor_context_free(self.inner.as_ptr());
+            ffi::xcb_cursor_context_free(self.ctx);
         }
     }
 }

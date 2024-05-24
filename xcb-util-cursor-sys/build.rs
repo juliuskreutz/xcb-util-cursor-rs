@@ -5,10 +5,13 @@ fn main() {
     println!("cargo:rerun-if-changed=wrapper.h");
 
     let bindings = bindgen::Builder::default()
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .header("wrapper.h")
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
         .allowlist_function("xcb_cursor_.*")
         .allowlist_type("xcb_cursor_.*")
+        .allowlist_var("xcb_cursor_.*")
+        .blocklist_type("xcb_connection_t")
+        .prepend_enum_name(false)
         .generate()
         .expect("Unable to generate bindings");
 

@@ -17,8 +17,5 @@ name = "xcb_util_cursor"
 path = "src/lib.rs"
 
 [dependencies]
-xcb = "1.2.0"
-
-[dependencies.xcb-util-cursor-sys]
-version = "0.1.3"
-path = "xcb-util-cursor-sys"
+xcb = "1.4.0"
+xcb-util-cursor-sys = { version = "0.1.3", path = "xcb-util-cursor-sys" }

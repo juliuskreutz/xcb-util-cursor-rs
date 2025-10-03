@@ -20,7 +20,7 @@
 
 use std::{ffi::CString, fmt, marker, ptr};
 
-use xcb::{x, Xid, XidNew};
+use xcb::{Xid, XidNew, x};
 use xcb_util_cursor_sys as ffi;
 
 /// This enum provides all possible cursors. [reference](https://www.oreilly.com/library/view/x-window-system/9780937175149/ChapterD.html)

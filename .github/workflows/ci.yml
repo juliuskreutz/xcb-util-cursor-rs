@@ -4,7 +4,6 @@ on:
   push:
   pull_request:
   workflow_dispatch:
-  schedule: [cron: "0 0 * * *"]
 
 env:
   RUSTFLAGS: -Dwarnings
@@ -18,7 +17,7 @@ jobs:
         run: sudo apt install -y libxcb-cursor-dev
 
       - name: Checkout Source Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
 
       - name: Get Rust Toolchain
         uses: actions-rs/toolchain@v1

@@ -1,8 +1,8 @@
 [package]
 name = "xcb-util-cursor"
-version = "0.3.4"
+version = "0.3.5"
 authors = ["Julius Kreutz <julius@kreutz.dev>"]
-edition = "2024"
+edition = "2021"
 description = "Bindings to libxcb-cursor."
 documentation = "https://docs.rs/xcb-util-cursor"
 readme = "README.md"
@@ -18,4 +18,4 @@ path = "src/lib.rs"
 
 [dependencies]
 xcb = "1.6.0"
-xcb-util-cursor-sys = { version = "0.1.5", path = "xcb-util-cursor-sys" }
+xcb-util-cursor-sys = { version = "0.1.6", path = "xcb-util-cursor-sys" }
